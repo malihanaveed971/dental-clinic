@@ -44,7 +44,7 @@
                             @empty
                                 <tr>
                                     <td class="p-3" colspan="4">
-                                        <div class="text-sm text-gray-600">No appointments found yet.</div>
+                                        <div class="text-sm text-gray-600">No invoices found yet.</div>
                                     </td>
                                 </tr>
                             @endforelse
@@ -53,8 +53,8 @@
                     </table>
                 </div>
 
-                <p class="mt-4 text-sm text-gray-600">
-                    Billing backend (Billing/Invoice tables + models + controllers) will be implemented in Phase 3.
+                <p class="mt-4 text-sm text-gray-500">
+                    All invoices are generated dynamically from the dentist's control panel.
                 </p>
             </div>
 
@@ -72,8 +72,8 @@
 
                 </div>
 
-                <div class="mt-4 text-sm text-gray-600">
-                    Use this page once invoices are connected to appointments.
+                <div class="mt-4 text-sm text-gray-500">
+                    Calculated automatically from treatments and prescriptions.
                 </div>
             </div>
         </div>

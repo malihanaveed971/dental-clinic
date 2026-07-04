@@ -9,28 +9,23 @@ class BillingController extends Controller
 {
     public function index(Request $request)
     {
-        // Billing tables may not exist yet, so make the page functional using
-        // existing `appointments` data and a deterministic pricing/status rule.
-
-        $recentAppointments = Appointment::query()
+        // Load real invoices from the database
+        $realInvoices = \App\Models\Invoice::with('appointment')
             ->orderByDesc('created_at')
-            ->limit(10)
+            ->limit(20)
             ->get();
 
-        $invoices = $recentAppointments->map(function ($appointment) {
-            $amount = ((int) $appointment->id % 2 === 0) ? 120 : 90;
-            $status = $amount === 120 ? 'Paid' : 'Unpaid';
-
+        $invoices = $realInvoices->map(function ($invoice) {
             return [
-                'invoice_no' => 'INV-' . str_pad((string) $appointment->id, 4, '0', STR_PAD_LEFT),
-                'date' => optional($appointment->appointment_date)->format('Y-m-d'),
-                'amount' => $amount,
-                'status' => $status,
+                'invoice_no' => $invoice->invoice_no,
+                'date' => $invoice->created_at ? $invoice->created_at->format('Y-m-d') : '—',
+                'amount' => $invoice->grand_total,
+                'status' => $invoice->status,
             ];
         });
 
-        $paidTotal = $invoices->where('status', 'Paid')->sum('amount');
-        $unpaidTotal = $invoices->where('status', 'Unpaid')->sum('amount');
+        $paidTotal = $realInvoices->where('status', 'Paid')->sum('grand_total');
+        $unpaidTotal = $realInvoices->where('status', 'Unpaid')->sum('grand_total');
 
         return view('billing.index', [
             'invoices' => $invoices,
