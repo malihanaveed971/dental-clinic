@@ -1,14 +1,25 @@
-public function up(): void
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
 {
-    Schema::create('dentists', function (Blueprint $table) {
-        $table->id();
-        $table->string('name');
-        $table->string('specialization');
-        $table->string('phone')->nullable();
-        // Add these new fields for a more professional profile
-        $table->string('email')->unique(); // Unique email for contact
-        $table->text('bio')->nullable();    // Allows for longer professional descriptions
-        $table->string('photo_path')->nullable(); // To store the path to their profile image
-        $table->timestamps();
-    });
-}
+    public function up(): void
+    {
+        Schema::create('dentists', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('specialization');
+            $table->string('phone')->nullable();
+            $table->string('email')->unique();
+            $table->text('bio')->nullable();
+            $table->string('photo_path')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('dentists');
+    }
+};
